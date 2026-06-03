@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="header-metrics">
-          <div class="heat-pill" id="followersGoal">0 / 10.000 fans</div>
+          <div class="heat-pill" id="followersGoal">0 / 20.000 fans</div>
           <div class="music-pill" id="musicStats">🎧 Total Streams: 0 | 💰 Regalias Hoy: +0€</div>
         </div>
       </header>
@@ -45,6 +45,11 @@
             <span>Dinero</span>
             <strong id="stat-dinero">150€</strong>
           </article>
+          <article class="stat-tile rent">
+            <span>Alquiler</span>
+            <strong id="stat-rent">🏠 30 días</strong>
+            <small>Mes de 30 días</small>
+          </article>
           <article class="stat-tile warning">
             <span>Fatiga</span>
             <strong id="stat-fatiga">0%</strong>
@@ -60,7 +65,7 @@
         <section class="progress-card" aria-label="Progreso de seguidores">
           <div>
             <p class="card-kicker">Salto profesional</p>
-            <h2><span id="stat-seguidores">0</span> / 10.000 seguidores</h2>
+            <h2><span id="stat-seguidores">0</span> / 20.000 seguidores</h2>
           </div>
           <i class="bar"><b id="bar-seguidores" style="width: 0%"></b></i>
         </section>
@@ -297,6 +302,21 @@
         </section>
       </section>
 
+      <section class="tab-screen" id="tab-inventario" aria-labelledby="tab-inventario-btn">
+        <div class="section-title">
+          <p class="card-kicker">Inventario / Estudio</p>
+          <h2>Equipo comprado</h2>
+        </div>
+
+        <section class="inventory-quality-card">
+          <p class="card-kicker">Calidad de equipo</p>
+          <h2 id="equipmentQuality">+0 calidad</h2>
+          <p>Este bonus entra directamente en la creación de canciones.</p>
+        </section>
+
+        <div class="inventory-list" id="inventoryList"></div>
+      </section>
+
       <nav class="bottom-nav" aria-label="Navegación de fase 1">
         <button class="nav-item is-active" id="tab-calendario-btn" type="button" data-tab="tab-calendario">
           <span>📅</span>
@@ -317,6 +337,10 @@
         <button class="nav-item" id="tab-tienda-btn" type="button" data-tab="tab-tienda">
           <span>🛒</span>
           Tienda
+        </button>
+        <button class="nav-item" id="tab-inventario-btn" type="button" data-tab="tab-inventario">
+          <span>🎛️</span>
+          Estudio
         </button>
       </nav>
     </main>

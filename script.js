@@ -6,7 +6,7 @@
  */
 
 const FRANJAS = ["manana", "tarde", "noche"];
-const OBJETIVO_SEGUIDORES = 10000;
+const OBJETIVO_SEGUIDORES = 20000;
 const COSTE_ALQUILER = 300;
 const COSTE_COMIDA = 100;
 const INGRESO_DIARIO_POR_SINGLE = 2;
@@ -189,6 +189,7 @@ const ITEMS_TIENDA = [
     id: "teclado-midi",
     nombre: "Teclado MIDI",
     categoria: "Instrumentos",
+    tipo: "extra",
     nivel: 1,
     bonusCalidad: 5,
     coste: 130,
@@ -199,6 +200,7 @@ const ITEMS_TIENDA = [
     id: "akai-ritmos",
     nombre: "Caja de Ritmos AKAI",
     categoria: "Instrumentos",
+    tipo: "extra",
     nivel: 2,
     bonusCalidad: 10,
     coste: 390,
@@ -209,6 +211,7 @@ const ITEMS_TIENDA = [
     id: "paneles-acusticos",
     nombre: "Paneles Acústicos",
     categoria: "Instrumentos",
+    tipo: "extra",
     nivel: 1,
     bonusCalidad: 4,
     coste: 95,
@@ -247,6 +250,14 @@ const TWEETS_ESCENA = [
   "El nuevo album de God Bunny ha colapsado los servidores de Spotify, la industria musical se ha parado por completo.",
   "Hype maximo: Ralphie Chus acaba de anunciar un concierto sorpresa en una azotea del centro esta tarde.",
   "Dilema en los foros de rap: ¿Se ha vendido Psyko al pop comercial o sigue manteniendo la esencia del bloque?",
+  "🚨 Rao Alejandro acaba de dropear un EP sorpresa de 4 temas, la escena esta colapsada.",
+  "Good Bunny ha subido una foto con tres productores y un disco duro. El viernes puede arder todo.",
+  "Feid-o y Mike Towers suenan juntos en una filtracion de 12 segundos. Twitter ya esta haciendo teorias.",
+  "O-Zuna anuncia single esta semana y los playlists grandes estan moviendo sillas.",
+  "Carol J acaba de bloquear media portada de Spotify con una campaña sorpresa.",
+  "Quepedo borra todas sus fotos y deja solo un emoji de hielo. Huele a lanzamiento.",
+  "Rao Alejandro esta en tendencia por un snippet de madrugada. Mal dia para sacar sin mirar calendario.",
+  "Good Gyal y Cruz Cafe se cruzan en stories desde el mismo estudio. La escena esta en alerta.",
 ];
 
 const TRABAJOS = {
@@ -331,6 +342,102 @@ const eventosTrabajo = [
       aplicar: ({ contexto }) => {
         jugador.respeto = limitar(jugador.respeto + 2, 1, 100);
         contexto.fatigaExtra += 15;
+        return contexto;
+      },
+    },
+  },
+  {
+    id: "inspector-chivatazo",
+    trabajos: ["general"],
+    titulo: "El Chivatazo del Inspector",
+    texto: "Viene una inspección de trabajo sorpresa y no tienes los papeles del contrato al día en este curro secundario.",
+    opcionA: {
+      texto: "Esconderte en los baños",
+      resultado: "Te escondes con el corazón en la garganta. +20 fatiga, sueldo intacto.",
+      aplicar: ({ contexto }) => {
+        contexto.fatigaExtra += 20;
+        return contexto;
+      },
+    },
+    opcionB: {
+      texto: "Disimular y trabajar",
+      resultado: "Intentas pasar desapercibido mientras sigues currando.",
+      aplicar: ({ contexto }) => {
+        if (Math.random() < 0.4) {
+          contexto.sueldoExtra -= 50;
+          contexto.resultadoExtra = " Te cae el marrón del negocio: -50€ descontados del sueldo.";
+        }
+        return contexto;
+      },
+    },
+  },
+  {
+    id: "almuerzo-robado",
+    trabajos: ["general"],
+    titulo: "El Almuerzo Robado",
+    texto: "Alguien se ha comido tu tapper de comida de la nevera de empleados y estás sin energía.",
+    opcionA: {
+      texto: "Gastar 6€ en comida rápida",
+      resultado: "Pides comida rápida para salvar el turno. -6€, -15 fatiga.",
+      aplicar: ({ contexto }) => {
+        jugador.dinero -= 6;
+        jugador.fatiga = limitar(jugador.fatiga - 15, 0, 100);
+        return contexto;
+      },
+    },
+    opcionB: {
+      texto: "Aguantar el turno del hambre",
+      resultado: "Curras con el estómago haciendo 808s. +25 frustración, +15 fatiga.",
+      aplicar: ({ contexto }) => {
+        jugador.frustracion = limitar(jugador.frustracion + 25, 0, 100);
+        contexto.fatigaExtra += 15;
+        return contexto;
+      },
+    },
+  },
+  {
+    id: "pintor-pared-humeda",
+    trabajos: ["pintor"],
+    titulo: "Pared húmeda",
+    texto: "Una pared empieza a escupir humedad y el casero te pide taparlo con pintura barata.",
+    opcionA: {
+      texto: "Taparlo rápido",
+      resultado: "Lo tapas y cobras sin preguntar. +8€ bonus, +10 frustración.",
+      aplicar: ({ contexto }) => {
+        contexto.sueldoExtra += 8;
+        jugador.frustracion = limitar(jugador.frustracion + 10, 0, 100);
+        return contexto;
+      },
+    },
+    opcionB: {
+      texto: "Avisar al inquilino",
+      resultado: "Avisas al inquilino y pierdes favor del casero. +3 respeto, -12€ sueldo.",
+      aplicar: ({ contexto }) => {
+        jugador.respeto = limitar(jugador.respeto + 3, 1, 100);
+        contexto.sueldoExtra -= 12;
+        return contexto;
+      },
+    },
+  },
+  {
+    id: "pintor-escalera",
+    trabajos: ["pintor"],
+    titulo: "Escalera asesina",
+    texto: "La escalera cojea como un sample mal cortado, pero queda un techo entero por pintar.",
+    opcionA: {
+      texto: "Subir igual",
+      resultado: "Subes igual y terminas el techo. Sueldo intacto, +25 fatiga.",
+      aplicar: ({ contexto }) => {
+        contexto.fatigaExtra += 25;
+        return contexto;
+      },
+    },
+    opcionB: {
+      texto: "Negarte",
+      resultado: "Te plantas por seguridad. -15€ sueldo, +2 respeto propio.",
+      aplicar: ({ contexto }) => {
+        contexto.sueldoExtra -= 15;
+        jugador.respeto = limitar(jugador.respeto + 2, 1, 100);
         return contexto;
       },
     },
@@ -428,6 +535,54 @@ const eventosTrabajo = [
       resultado: "Ves comida buena acabar en la basura. +10 frustración.",
       aplicar: ({ contexto }) => {
         jugador.frustracion = limitar(jugador.frustracion + 10, 0, 100);
+        return contexto;
+      },
+    },
+  },
+  {
+    id: "burger-freidora-rota",
+    trabajos: ["burger"],
+    titulo: "La Freidora Rota",
+    texto: "La freidora principal empieza a echar un humo negro rarísimo en hora punta de menús.",
+    opcionA: {
+      texto: "Arreglarla tú rápido",
+      resultado: "Te cuelgas la medalla salvando el servicio. +30 fatiga, +20€ bonus.",
+      aplicar: ({ contexto }) => {
+        contexto.fatigaExtra += 30;
+        contexto.sueldoExtra += 20;
+        return contexto;
+      },
+    },
+    opcionB: {
+      texto: "Esperar al técnico",
+      resultado: "Te cruzas de brazos y el local va lento. -10€ sueldo, fatiga intacta.",
+      aplicar: ({ contexto }) => {
+        contexto.sueldoExtra -= 10;
+        return contexto;
+      },
+    },
+  },
+  {
+    id: "burger-pedido-vip",
+    trabajos: ["burger"],
+    titulo: "El Pedido del VIP",
+    texto: "Entra un cliente exigente y borde que resulta ser un streamer conocido de la zona.",
+    opcionA: {
+      texto: "Tratarle como a un rey",
+      resultado: "Aguantas sus aires. +15 frustración, +10€ bonus.",
+      aplicar: ({ contexto }) => {
+        jugador.frustracion = limitar(jugador.frustracion + 15, 0, 100);
+        contexto.sueldoExtra += 10;
+        return contexto;
+      },
+    },
+    opcionB: {
+      texto: "Nugget extra y barras",
+      resultado: "Le vacilas con barras. +3 carisma, +5 respeto, -15€ sanción.",
+      aplicar: ({ contexto }) => {
+        jugador.carisma = limitar(jugador.carisma + 3, 1, 100);
+        jugador.respeto = limitar(jugador.respeto + 5, 1, 100);
+        contexto.sueldoExtra -= 15;
         return contexto;
       },
     },
@@ -619,6 +774,30 @@ const eventosTrabajo = [
       },
     },
   },
+  {
+    id: "super-pasillo-ofertas",
+    trabajos: ["cajero"],
+    titulo: "Pasillo de Ofertas",
+    texto: "El jefe te mete prisa para montar una torre gigante de latas de cerveza en el pasillo central.",
+    opcionA: {
+      texto: "Hacerlo corriendo",
+      resultado: "Montas la torre a toda prisa. +25 fatiga, +5€ bonus.",
+      aplicar: ({ contexto }) => {
+        contexto.fatigaExtra += 25;
+        contexto.sueldoExtra += 5;
+        return contexto;
+      },
+    },
+    opcionB: {
+      texto: "Hacerlo con calma",
+      resultado: "Alineas la torre perfecto, pero tardas. -5€ sueldo, +2 flow.",
+      aplicar: ({ contexto }) => {
+        contexto.sueldoExtra -= 5;
+        jugador.flow = limitar(jugador.flow + 2, 1, 100);
+        return contexto;
+      },
+    },
+  },
 ];
 
 const NPCS = {
@@ -781,7 +960,7 @@ const plantillasDMs = [
       consumeFranja: "tarde",
       fatiga: 0,
       aplicar: () => {
-        sumarSeguidoresDirectos(200);
+        sumarSeguidoresDirectos(100, { redes: true });
         jugador.frustracion = limitar(jugador.frustracion + 10, 0, 100);
         jugador.estados.beefActivo = true;
         agregarTweet("rival", "La demo esa necesita café. Mucho café.");
@@ -789,7 +968,7 @@ const plantillasDMs = [
           tipo: "positive",
           npc: "rival",
           titulo: "Beef de tarde",
-          texto: "Entraste al beef, ganaste +200 seguidores por salseo y perdiste la tarde.",
+          texto: "Entraste al beef, ganaste seguidores por salseo y perdiste la tarde.",
         });
       },
     },
@@ -853,9 +1032,9 @@ const plantillasDMs = [
     opcionA: {
       texto: "Aceptar bolo gratis",
       aplicar: () => {
-        sumarSeguidoresDirectos(300);
+        sumarSeguidoresDirectos(150, { redes: true });
         jugador.fatiga = limitar(jugador.fatiga + 50, 0, 100);
-        registrarEvento({ tipo: "positive", npc: "manager", titulo: "Bolo de nave", texto: "+300 seguidores, +50 fatiga, 0€ de caché." });
+        registrarEvento({ tipo: "positive", npc: "manager", titulo: "Bolo de nave", texto: "+150 seguidores base, +50 fatiga, 0€ de caché." });
       },
     },
     opcionB: {
@@ -878,9 +1057,9 @@ const plantillasDMs = [
     opcionA: {
       texto: "Responder humilde",
       aplicar: () => {
-        sumarSeguidoresDirectos(50);
+        sumarSeguidoresDirectos(25, { redes: true });
         jugador.carisma = limitar(jugador.carisma + 2, 1, 100);
-        registrarEvento({ tipo: "positive", npc: "crew", titulo: "Humildad rentable", texto: "+50 seguidores y +2 carisma." });
+        registrarEvento({ tipo: "positive", npc: "crew", titulo: "Humildad rentable", texto: "+25 seguidores base y +2 carisma." });
       },
     },
     opcionB: {
@@ -988,11 +1167,11 @@ const plantillasDMs = [
       consumeFranja: "tarde",
       fatiga: 25,
       aplicar: () => {
-        sumarSeguidoresDirectos(30);
+        sumarSeguidoresDirectos(15, { redes: true });
         jugador.carisma = limitar(jugador.carisma + 2, 1, 100);
         jugador.singleProgreso = 0;
         jugador.trabajandoEnSingle = false;
-        registrarEvento({ tipo: "positive", npc: "crew", titulo: "Colabo de plaza", texto: "Consumes la tarde entera. +30 seguidores, +2 carisma y tu single propio vuelve a 0/3." });
+        registrarEvento({ tipo: "positive", npc: "crew", titulo: "Colabo de plaza", texto: "Consumes la tarde entera. +15 seguidores base, +2 carisma y tu single propio vuelve a 0/3." });
       },
     },
     opcionB: {
@@ -1001,6 +1180,139 @@ const plantillasDMs = [
         jugador.frustracion = limitar(jugador.frustracion - 5, 0, 100);
         jugador.respeto = limitar(jugador.respeto - 3, 1, 100);
         registrarEvento({ tipo: "alert", npc: "crew", titulo: "Largas", texto: "-5 frustración, -3 respeto en los bancos." });
+      },
+    },
+  },
+  {
+    id: "dm-estafador-bots",
+    remitente: "Estafador de Cuentas",
+    npc: "manager",
+    avatarColor: "dm-blue",
+    mensaje: "Te subo 2.000 seguidores bots en Instagram ya por solo 30€. Te renta para el algoritmo.",
+    minSeguidores: 0,
+    respondido: false,
+    opcionA: {
+      texto: "Pagar 30€",
+      aplicar: () => {
+        if (jugador.dinero < 30) {
+          registrarEvento({
+            tipo: "alert",
+            npc: "manager",
+            titulo: "Bots fallidos",
+            texto: "No tenías 30€ para comprar bots. Quizá el algoritmo te acaba de salvar.",
+          });
+          return;
+        }
+
+        jugador.dinero -= 30;
+        jugador.seguidores = limitar(jugador.seguidores + 2000, 0, OBJETIVO_SEGUIDORES);
+        jugador.estados.penalizadorBotsHype = 0.5;
+        verificarProgreso();
+        registrarEvento({
+          tipo: "alert",
+          npc: "manager",
+          titulo: "Seguidores fake",
+          texto: "+2.000 seguidores bots, pero el algoritmo detecta humo: el hype real de próximos lanzamientos rinde un 50% menos.",
+        });
+      },
+    },
+    opcionB: {
+      texto: "Pasar de él",
+      aplicar: () => {
+        jugador.respeto = limitar(jugador.respeto + 2, 1, 100);
+        registrarEvento({
+          tipo: "positive",
+          npc: "manager",
+          titulo: "Cuenta limpia",
+          texto: "Mantienes la cuenta orgánica. +2 respeto por no comprar humo.",
+        });
+      },
+    },
+  },
+  {
+    id: "dm-fuentes-streetwear",
+    remitente: "Colega del Diseño",
+    npc: "diseñador",
+    avatarColor: "dm-green",
+    mensaje: "Bro, tengo una tipografía retro de streetwear guapísima. Te la paso por 10€ para las portadas de tus singles.",
+    minSeguidores: 0,
+    respondido: false,
+    opcionA: {
+      texto: "Comprar",
+      aplicar: () => {
+        if (jugador.dinero < 10) {
+          registrarEvento({
+            tipo: "alert",
+            npc: "diseñador",
+            titulo: "Sin pasta para fuentes",
+            texto: "No tenías 10€. La portada seguirá oliendo a plantilla gratis.",
+          });
+          return;
+        }
+
+        jugador.dinero -= 10;
+        agregarObjetoInventario("Fuentes Streetwear");
+        registrarEvento({
+          tipo: "positive",
+          npc: "diseñador",
+          titulo: "Fuentes Streetwear",
+          texto: "Compraste tipografías para portadas. +5 calidad fija en próximos temas inéditos.",
+        });
+      },
+    },
+    opcionB: {
+      texto: "Buscar pirata en Google",
+      aplicar: () => {
+        jugador.frustracion = limitar(jugador.frustracion + 10, 0, 100);
+        registrarEvento({
+          tipo: "alert",
+          npc: "diseñador",
+          titulo: "Fuente con virus",
+          texto: "El ZIP venía con sorpresa. +10 frustración y +0 calidad.",
+        });
+      },
+    },
+  },
+  {
+    id: "dm-promotor-local",
+    remitente: "Promotor Local",
+    npc: "manager",
+    avatarColor: "dm-gray",
+    mensaje: "Hay un micro abierto en el centro de Vallecas esta tarde. No cobras, pero va a ir un productor de la escena a mirar.",
+    minSeguidores: 0,
+    respondido: false,
+    opcionA: {
+      texto: "Ir a rapear",
+      consumeFranja: "tarde",
+      fatiga: 35,
+      aplicar: () => {
+        sumarSeguidoresDirectos(300, { redes: true });
+        if (jugador.flow > 15) {
+          jugador.carisma = limitar(jugador.carisma + 3, 1, 100);
+          registrarEvento({
+            tipo: "positive",
+            npc: "manager",
+            titulo: "Productor atento",
+            texto: "Tu flow llamó la atención del productor. +3 carisma.",
+          });
+        }
+        registrarEvento({
+          tipo: "positive",
+          npc: "manager",
+          titulo: "Micro abierto",
+          texto: "Fuiste a rapear a Vallecas. +300 seguidores base, +35 fatiga y la tarde queda consumida.",
+        });
+      },
+    },
+    opcionB: {
+      texto: "Quedarte en casa",
+      aplicar: () => {
+        registrarEvento({
+          tipo: "positive",
+          npc: "manager",
+          titulo: "Tarde intacta",
+          texto: "Pasas del micro abierto. Mantienes tus puntos de tarde.",
+        });
       },
     },
   },
@@ -1066,6 +1378,7 @@ const jugador = {
     riesgoMultaRuido: false,
     proximoSingleCalidadBonus: 0,
     proximoSingleCalidadFactor: 1,
+    penalizadorBotsHype: 1,
     copyrightStrikeDia: null,
   },
   dmsActivos: [],
@@ -1097,6 +1410,7 @@ const dom = {
   timeChips: document.querySelectorAll(".time-chip"),
   statDia: document.querySelector("#stat-dia"),
   statDinero: document.querySelector("#stat-dinero"),
+  statRent: document.querySelector("#stat-rent"),
   statFatiga: document.querySelector("#stat-fatiga"),
   statFrustracion: document.querySelector("#stat-frustracion"),
   statSeguidores: document.querySelector("#stat-seguidores"),
@@ -1134,6 +1448,8 @@ const dom = {
   dmDecisionModal: document.querySelector("#dmDecisionModal"),
   twitterFeed: document.querySelector("#twitterFeed"),
   libraryList: document.querySelector("#libraryList"),
+  inventoryList: document.querySelector("#inventoryList"),
+  equipmentQuality: document.querySelector("#equipmentQuality"),
   shopGrid: document.querySelector("#shopGrid"),
   jobList: document.querySelector("#jobList"),
   workButtons: document.querySelectorAll("[data-work]"),
@@ -1195,6 +1511,35 @@ function ganarSeguidores(cantidadBase, motivo = "Nueva gente llegó al perfil.")
   verificarProgreso();
   renderizarEstado();
   return seguidoresGanados;
+}
+
+function contarTemasLanzados() {
+  return jugador.biblioteca.filter((cancion) => cancion.estado === "Lanzado").length;
+}
+
+function obtenerFactorCatalogoRedes() {
+  const temasLanzados = contarTemasLanzados();
+  if (temasLanzados === 0) return 0.2;
+  if (temasLanzados === 1) return 0.6;
+  return 1;
+}
+
+function avisarPenalizacionCatalogoRedes() {
+  registrarEvento({
+    tipo: "alert",
+    titulo: "⚠️ ALGORITMO",
+    texto: "Tus acciones en redes rinden menos porque tu catálogo musical en Spotify es casi inexistente.",
+  });
+}
+
+function aplicarFiltroCatalogoRedes(cantidadBase) {
+  const factorCatalogo = obtenerFactorCatalogoRedes();
+  if (factorCatalogo < 1 && !jugador.estados.silenciarAvisoCatalogoRedes) avisarPenalizacionCatalogoRedes();
+  return Math.max(1, Math.round(cantidadBase * factorCatalogo));
+}
+
+function ganarSeguidoresRedes(cantidadBase, motivo = "Las redes movieron tu perfil.") {
+  return ganarSeguidores(aplicarFiltroCatalogoRedes(cantidadBase), motivo);
 }
 
 function aplicarMultiplicadorCarisma(cantidadBase) {
@@ -1321,7 +1666,7 @@ function ejecutarRuletaAlgoritmo() {
   if (tirada < 0.4) {
     const base = numeroAleatorio(2, 5);
     const baseConCarisma = aplicarModificadorTikTok(aplicarMultiplicadorCarisma(base));
-    ganarSeguidores(baseConCarisma, "Has entrado en shadowban. Solo te ven tus tres amigos del banco.");
+    ganarSeguidoresRedes(baseConCarisma, "Has entrado en shadowban. Solo te ven tus tres amigos del banco.");
     mostrarMensaje("Shadowban", "Solo te ven tus tres amigos del banco.", "alert");
     return;
   }
@@ -1329,7 +1674,7 @@ function ejecutarRuletaAlgoritmo() {
   if (tirada < 0.9) {
     const base = numeroAleatorio(80, 150);
     const baseConCarisma = aplicarModificadorTikTok(aplicarMultiplicadorCarisma(base));
-    ganarSeguidores(baseConCarisma, "Buen alcance: los fans comparten tus barras.");
+    ganarSeguidoresRedes(baseConCarisma, "Buen alcance: los fans comparten tus barras.");
     mostrarMensaje(
       "Buen alcance",
       `El clip respira. Carisma convierte ${base} en ${baseConCarisma} antes de la bola de nieve.`,
@@ -1340,7 +1685,7 @@ function ejecutarRuletaAlgoritmo() {
 
   const base = numeroAleatorio(1000, 1800);
   const baseConCarisma = aplicarModificadorTikTok(aplicarMultiplicadorCarisma(base));
-  ganarSeguidores(baseConCarisma, "¡VIRAL! El algoritmo acaba de mirar hacia tu bloque.");
+  ganarSeguidoresRedes(baseConCarisma, "¡VIRAL! El algoritmo acaba de mirar hacia tu bloque.");
   dispararAlertaViral(baseConCarisma);
 }
 
@@ -1462,7 +1807,7 @@ function comprobarDramaFamiliarPorRuido() {
 
   if (tieneAuriculares || Math.random() > 0.4) return;
 
-  if (Math.random() < 0.5) {
+  if (Math.random() < 0.75) {
     jugador.dinero -= 30;
     registrarEvento({
       tipo: "alert",
@@ -1547,7 +1892,7 @@ function activarEventoBeatRobado() {
 function resolverBeatRobadoTwitter() {
   jugador.carisma = limitar(jugador.carisma + 4, 1, 100);
   agregarEnemigo("Rival del bloque");
-  ganarSeguidores(numeroAleatorio(160, 320), "El drama del beat robado se movió por Twitter.");
+  ganarSeguidoresRedes(numeroAleatorio(160, 320), "El drama del beat robado se movió por Twitter.");
   agregarTweet("rival", "A algunos les duele que uno brille. Los créditos son para quien rompe, no para quien llora.");
   registrarEvento({
     tipo: "positive",
@@ -1701,7 +2046,7 @@ function resolverManagerMaloPagar() {
 
   jugador.dinero -= 80;
   if (Math.random() < 0.25) {
-    ganarSeguidores(numeroAleatorio(90, 180), "La playlist dudosa funcionó por accidente.");
+    ganarSeguidoresRedes(numeroAleatorio(90, 180), "La playlist dudosa funcionó por accidente.");
     registrarEvento({
       tipo: "positive",
       npc: "manager",
@@ -1785,7 +2130,7 @@ function responderBeefTwitter() {
   jugador.fatiga = limitar(jugador.fatiga + 20, 0, 100);
 
   const base = numeroAleatorio(400, 800) + jugador.flow * 4;
-  ganarSeguidores(base, "La tiradera convirtió el beef en morbo viral.");
+  ganarSeguidoresRedes(base, "La tiradera convirtió el beef en morbo viral.");
   jugador.carisma = limitar(jugador.carisma + 3, 1, 100);
   jugador.respeto = limitar(jugador.respeto + 2, 1, 100);
   agregarTweet("rival", "Vale, esa respuesta dolió. Pero esto no se queda así.");
@@ -1798,9 +2143,12 @@ function responderBeefTwitter() {
   renderizarEstado();
 }
 
-function sumarSeguidoresDirectos(cantidad) {
-  jugador.seguidores = limitar(jugador.seguidores + cantidad, 0, OBJETIVO_SEGUIDORES);
+function sumarSeguidoresDirectos(cantidad, opciones = {}) {
+  const cantidadFinal = opciones.redes ? aplicarFiltroCatalogoRedes(cantidad) : cantidad;
+  jugador.seguidores = limitar(jugador.seguidores + cantidadFinal, 0, OBJETIVO_SEGUIDORES);
   verificarProgreso();
+  renderizarEstado();
+  return cantidadFinal;
 }
 
 function aplicarLesion(texto) {
@@ -1874,9 +2222,14 @@ function actualizarTwitter() {
   const referencia = obtenerCancionReferenciaTwitter();
   const calidad = referencia?.calidad ?? 55;
   const frases = [];
-  const total = numeroAleatorio(3, 4);
+  const total = 4;
+  const escenaAutomatica = numeroAleatorio(2, 3);
   const probHater = calidad < 40 ? 0.58 : calidad > 70 ? 0.12 : 0.3;
   const probFan = calidad > 70 ? 0.58 : calidad < 40 ? 0.12 : 0.3;
+
+  elegirAleatorios(TWEETS_ESCENA, escenaAutomatica).forEach((texto) => {
+    frases.push({ texto, clase: "trend" });
+  });
 
   if (referencia && calidad < 40 && Math.random() < 0.15) {
     frases.push({ texto: TWEETS_MEME[numeroAleatorio(0, TWEETS_MEME.length - 1)], clase: "hot" });
@@ -1914,20 +2267,24 @@ function actualizarTwitter() {
 }
 
 function cargarDMsIniciales() {
-  jugador.dmsActivos = plantillasDMs.filter((dm) => dm.inicial).map((dm) => dm.id);
-  renderizarDMs();
+  jugador.dmsActivos = [];
+  limpiarEstadosTemporalesDMs();
+  inyectarDMsAleatoriosDiarios(1, 3, false);
 }
 
 function intentarAgregarDMDiario() {
-  if (jugador.diaActual === 1) return;
+  limpiarBandejaDiariaDMs();
+  inyectarDMsAleatoriosDiarios(1, 3, true);
+}
 
+function inyectarDMsAleatoriosDiarios(minimo = 1, maximo = 3, avisar = true) {
   const candidatos = plantillasDMs.filter((dm) => {
     return !dm.respondido && !jugador.dmsActivos.includes(dm.id) && jugador.seguidores >= dm.minSeguidores;
   });
 
   if (candidatos.length === 0) return;
 
-  const cantidadEntrante = Math.min(numeroAleatorio(0, 2), candidatos.length);
+  const cantidadEntrante = Math.min(numeroAleatorio(minimo, maximo), candidatos.length);
   if (cantidadEntrante === 0) return;
 
   const elegidos = elegirAleatorios(candidatos, cantidadEntrante);
@@ -1935,6 +2292,8 @@ function intentarAgregarDMDiario() {
     jugador.dmsActivos.unshift(dm.id);
   });
   renderizarDMs();
+  if (!avisar) return;
+
   registrarEvento({
     tipo: "positive",
     titulo: cantidadEntrante === 1 ? "Nuevo DM" : "Nuevos DMs",
@@ -1943,6 +2302,18 @@ function intentarAgregarDMDiario() {
         ? `${elegidos[0].remitente} te escribió en la Bandeja de Entrada de Redes.`
         : `${cantidadEntrante} mensajes nuevos esperan en la Bandeja de Entrada de Redes.`,
   });
+}
+
+function limpiarEstadosTemporalesDMs() {
+  plantillasDMs.forEach((dm) => {
+    dm.respondido = false;
+  });
+}
+
+function limpiarBandejaDiariaDMs() {
+  jugador.dmsActivos = [];
+  limpiarEstadosTemporalesDMs();
+  renderizarDMs();
 }
 
 function renderizarDMs() {
@@ -2011,7 +2382,7 @@ function abrirModalDM(dmId) {
 
 function responderDM(dmId, opcion) {
   const dm = obtenerPlantillaDM(dmId);
-  if (!dm || dm.respondido) return;
+  if (!dm || !jugador.dmsActivos.includes(dm.id)) return;
 
   if (!puedeRevisarDMs()) {
     avisarDMsSoloTarde();
@@ -2027,7 +2398,14 @@ function responderDM(dmId, opcion) {
     return;
   }
 
+  const debeAvisarCatalogo = obtenerFactorCatalogoRedes() < 1;
+  if (debeAvisarCatalogo) {
+    avisarPenalizacionCatalogoRedes();
+    jugador.estados.silenciarAvisoCatalogoRedes = true;
+  }
+
   decision.aplicar();
+  jugador.estados.silenciarAvisoCatalogoRedes = false;
   if (decision.consumeFranja) consumirFranjaDM(decision.consumeFranja, decision);
   dm.respondido = true;
   jugador.dmsActivos = jugador.dmsActivos.filter((id) => id !== dm.id);
@@ -2042,7 +2420,9 @@ function responderDM(dmId, opcion) {
     titulo: "DM respondido",
     texto: `${dm.remitente}: ${decision.texto}.`,
   });
-  renderizarDMs();
+  const tarjetaDM = dom.dmList?.querySelector(`[data-dm-id="${dm.id}"]`);
+  if (tarjetaDM) tarjetaDM.remove();
+  if (jugador.dmsActivos.length === 0) renderizarDMs();
   renderizarEstado();
 }
 
@@ -2346,7 +2726,8 @@ function lanzarTema(cancionId) {
   }
 
   const impactoIndustria = calcularImpactoIndustria(jugador.diaActual);
-  const streamsDebut = Math.round(cancion.calidad * 10 * (1 + cancion.hype / 100));
+  const hypeEfectivo = Math.round(cancion.hype * (jugador.estados.penalizadorBotsHype || 1));
+  const streamsDebut = Math.round(cancion.calidad * 10 * (1 + hypeEfectivo / 100));
   const ingresoDebut = Number((streamsDebut * VALOR_STREAM_EUROS).toFixed(2));
   const baseSeguidoresBrutos = Math.max(1, Math.round(streamsDebut / 2));
   const baseSeguidores = Math.max(1, Math.round(baseSeguidoresBrutos * impactoIndustria.factor));
@@ -2363,13 +2744,13 @@ function lanzarTema(cancionId) {
 
   ganarSeguidores(
     baseSeguidores,
-    `${cancion.nombre} sale a la calle. Calidad ${cancion.calidad}/100, hype ${cancion.hype}/100.`,
+    `${cancion.nombre} sale a la calle. Calidad ${cancion.calidad}/100, hype efectivo ${hypeEfectivo}/100.`,
   );
   registrarImpactoIndustria(impactoIndustria);
   registrarEvento({
     tipo: "positive",
     titulo: "Lanzamiento publicado",
-    texto: `${cancion.nombre} ya esta en plataformas. Debut: ${formatearNumero(streamsDebut)} streams iniciales por calidad e hype.`,
+    texto: `${cancion.nombre} ya esta en plataformas. Debut: ${formatearNumero(streamsDebut)} streams iniciales por calidad e hype${hypeEfectivo < cancion.hype ? " penalizado por bots" : ""}.`,
   });
   actualizarTwitter();
   mostrarMensaje("Tema lanzado", `${cancion.nombre} esta fuera.`, "viral");
@@ -2381,17 +2762,22 @@ function esDiaLanzamientoMusical(dia) {
 }
 
 function calcularBonusEquipoCalidad() {
-  const bonusDinamico = jugador.inventario.reduce((total, nombreItem) => {
-    const item = obtenerItemTienda(nombreItem);
-    return total + (item?.bonusCalidad || 0);
-  }, 0);
+  const bonusDinamico = calcularBonusEquipoInventario();
 
   const bonusCompatibilidad =
     (jugador.inventario.includes("Auriculares de Estudio") || jugador.inventario.includes("Auriculares") ? 5 : 0) +
     (jugador.inventario.includes("Micro Caro") || jugador.inventario.includes("Micrófono") ? 15 : 0) +
-    (jugador.inventario.includes("Portátil Bueno") || jugador.inventario.includes("Portátil Caro") ? 10 : 0);
+    (jugador.inventario.includes("Portátil Bueno") || jugador.inventario.includes("Portátil Caro") ? 10 : 0) +
+    (jugador.inventario.includes("Fuentes Streetwear") ? 5 : 0);
 
-  return limitar(bonusDinamico + bonusCompatibilidad, 0, 30);
+  return bonusDinamico + bonusCompatibilidad;
+}
+
+function calcularBonusEquipoInventario() {
+  return jugador.inventario.reduce((total, nombreItem) => {
+    const item = obtenerItemTienda(nombreItem);
+    return total + (item?.bonusCalidad || 0);
+  }, 0);
 }
 
 function seleccionarTrabajo(trabajoId) {
@@ -2489,7 +2875,7 @@ function trabajarCurro() {
 
   const contexto = crearContextoTrabajo();
 
-  if (Math.random() < 0.5) {
+  if (Math.random() < 0.75) {
     const dilema = obtenerDilemaTrabajo(contexto.trabajoId);
     if (dilema) {
       jugador.dilemaTrabajoActivo = { id: dilema.id, contexto };
@@ -2618,8 +3004,14 @@ function avanzarTiempo() {
 
 function cerrarDia() {
   const usoNocheParaSingle = jugador.estados.nocheTrabajoSingle;
+  const cerrarMes = jugador.diaActual % 30 === 0;
 
-  jugador.diaActual += 1;
+  if (cerrarMes && !procesarAlquilerMensual()) {
+    renderizarEstado();
+    return;
+  }
+
+  jugador.diaActual = cerrarMes ? 1 : jugador.diaActual + 1;
   jugador.franjaActual = "manana";
   jugador.fatiga = usoNocheParaSingle ? 40 : 0;
   jugador.estados.nocheTrabajoSingle = false;
@@ -2645,15 +3037,27 @@ function cerrarDia() {
     texto: "Nuevo día. El barrio no espera, pero al menos dormiste algo.",
   });
 
-  if ((jugador.diaActual - 1) % 30 === 0) {
-    cobrarGastosMensuales();
-  }
-
   resolverCopyrightPendiente();
   intentarAgregarDMDiario();
   generarTiendaDiaria();
   actualizarTwitter();
   manejarEventosAleatorios("dia");
+}
+
+function procesarAlquilerMensual() {
+  if (jugador.dinero >= COSTE_ALQUILER) {
+    jugador.dinero = Number((jugador.dinero - COSTE_ALQUILER).toFixed(2));
+    registrarEvento({
+      tipo: "alert",
+      titulo: "📉 ¡ALQUILER PAGADO!",
+      texto: `El casero ha cobrado los ${COSTE_ALQUILER}€ del mes. Mantienes tu cuarto un mes más.`,
+    });
+    mostrarMensaje("Alquiler pagado", `-${COSTE_ALQUILER}€. Nuevo mes, misma pelea.`, "positive");
+    return true;
+  }
+
+  activarGameOverEviccion();
+  return false;
 }
 
 function procesarStreamsDiarios() {
@@ -2695,26 +3099,29 @@ function procesarStreamsDiarios() {
 }
 
 function cobrarGastosMensuales() {
-  const gastoTotal = COSTE_ALQUILER + COSTE_COMIDA;
-  jugador.dinero -= gastoTotal;
-
-  registrarEvento({
-    tipo: "alert",
-    titulo: "Gastos mensuales",
-    texto: `Alquiler -${COSTE_ALQUILER}€ y comida -${COSTE_COMIDA}€. El subsuelo no perdona.`,
-  });
-
-  if (jugador.dinero < 0) {
-    activarGameOverDesahucio();
-  }
+  procesarAlquilerMensual();
 }
 
 function obtenerItemTienda(itemId) {
   return ITEMS_TIENDA.find((item) => item.id === itemId || item.nombre === itemId);
 }
 
+function jugadorPoseeItem(item) {
+  return jugador.inventario.includes(item.nombre);
+}
+
+function jugadorPoseeNivelCategoria(categoria, nivel) {
+  return ITEMS_TIENDA.some((item) => item.categoria === categoria && item.nivel === nivel && jugadorPoseeItem(item));
+}
+
+function itemDisponiblePorProgresion(item) {
+  if (item.tipo === "extra" || item.categoria === "Instrumentos") return true;
+  if (item.nivel <= 1) return true;
+  return jugadorPoseeNivelCategoria(item.categoria, item.nivel - 1);
+}
+
 function generarTiendaDiaria() {
-  const disponibles = ITEMS_TIENDA.filter((item) => !jugador.inventario.includes(item.nombre));
+  const disponibles = ITEMS_TIENDA.filter((item) => !jugadorPoseeItem(item) && itemDisponiblePorProgresion(item));
   const cantidad = numeroAleatorio(3, 4);
   jugador.tiendaActiva = elegirAleatorios(disponibles, Math.min(cantidad, disponibles.length)).map((item) => item.id);
   renderizarTienda();
@@ -2762,25 +3169,29 @@ function verificarProgreso() {
   registrarEvento({
     tipo: "positive",
     titulo: "Hit del Bloque desbloqueado",
-    texto: "10.000 seguidores exactos. La Fase 2 está llamando desde un estudio con sofá.",
+    texto: "20.000 seguidores exactos. La Fase 2 está llamando desde un estudio con sofá.",
   });
 
-  mostrarMensaje("HIT DEL BLOQUE", "Has llegado a 10.000 seguidores. Preparando salto profesional.", "viral");
+  mostrarMensaje("HIT DEL BLOQUE", "Has llegado a 20.000 seguidores. Preparando salto profesional.", "viral");
   congelarAcciones("Fase 2 pendiente");
   return true;
 }
 
 function activarGameOverDesahucio() {
+  activarGameOverEviccion();
+}
+
+function activarGameOverEviccion() {
   jugador.gameOver = true;
   congelarAcciones("Game Over");
 
   registrarEvento({
     tipo: "alert",
-    titulo: "Game Over por desahucio",
-    texto: "El dinero bajó de 0€ al cobrar alquiler y comida. La supervivencia ganó la ronda.",
+    titulo: "💀 EVICCIÓN",
+    texto: "No has podido pagar el alquiler del mes. Te han echado del piso y has tenido que volver a casa de tus padres. Fin de tu carrera musical.",
   });
 
-  mostrarMensaje("Desahucio", "No pudiste pagar el mes. Fin de la Fase 1.", "alert");
+  mostrarMensaje("EVICCIÓN", "No pudiste pagar el alquiler. Fin de la Fase 1.", "alert");
 }
 
 function puedeActuar(franjaNecesaria) {
@@ -2896,6 +3307,11 @@ function mostrarMensaje(titulo, texto, tipo = "positive") {
 function renderizarEstado() {
   dom.statDia.textContent = String(jugador.diaActual).padStart(2, "0");
   dom.statDinero.textContent = formatearEuros(jugador.dinero);
+  if (dom.statRent) {
+    const diaMes = ((jugador.diaActual - 1) % 30) + 1;
+    const diasAlquiler = diaMes === 30 ? 0 : 31 - diaMes;
+    dom.statRent.textContent = `🏠 Alquiler en ${diasAlquiler} día${diasAlquiler === 1 ? "" : "s"}: ${COSTE_ALQUILER}€`;
+  }
   dom.statFatiga.textContent = `${jugador.fatiga}%`;
   dom.statFrustracion.textContent = `${jugador.frustracion}%`;
   dom.statSeguidores.textContent = formatearNumero(jugador.seguidores);
@@ -2906,7 +3322,7 @@ function renderizarEstado() {
   dom.statFlow.textContent = jugador.flow;
   dom.statCarisma.textContent = jugador.carisma;
   dom.statRespeto.textContent = jugador.respeto;
-  dom.followersGoal.textContent = `${formatearNumero(jugador.seguidores)} / 10.000 fans`;
+  dom.followersGoal.textContent = `${formatearNumero(jugador.seguidores)} / 20.000 fans`;
   if (dom.musicStats) {
     dom.musicStats.textContent = `🎧 Total Streams: ${formatearNumero(jugador.totalStreamsHistoricos)} | 💰 Regalias Hoy: +${formatearEuros(jugador.ingresosDiariosActuales)}`;
   }
@@ -2996,6 +3412,7 @@ function renderizarEstado() {
   dom.storyBody.textContent = obtenerTextoNarrativo();
   renderizarCalendarioIndustria();
   renderizarTienda();
+  renderizarInventarioEstudio();
   renderizarBiblioteca();
 }
 
@@ -3037,6 +3454,63 @@ function renderizarTrabajos() {
   });
 
   dom.workButtons = document.querySelectorAll("[data-work]");
+}
+
+function renderizarInventarioEstudio() {
+  if (!dom.inventoryList) return;
+
+  const bonusEquipo = calcularBonusEquipoCalidad();
+  if (dom.equipmentQuality) {
+    dom.equipmentQuality.textContent = `+${bonusEquipo} calidad`;
+  }
+
+  dom.inventoryList.innerHTML = "";
+  const itemsComprados = ITEMS_TIENDA.filter((item) => jugadorPoseeItem(item));
+  const categoriasPrincipales = ["Portátiles", "Micrófonos", "Altavoces"];
+
+  categoriasPrincipales.forEach((categoria) => {
+    const itemsCategoria = itemsComprados
+      .filter((item) => item.categoria === categoria)
+      .sort((a, b) => b.nivel - a.nivel);
+    const mejorItem = itemsCategoria[0];
+    const card = document.createElement("article");
+    card.className = "inventory-card";
+    card.innerHTML = `
+      <h3>${categoria.replace("Portátiles", "Portátil").replace("Micrófonos", "Micrófono")}</h3>
+      <ul>
+        ${
+          mejorItem
+            ? `<li><span>Nivel ${mejorItem.nivel}: ${mejorItem.nombre}</span><strong>+${mejorItem.bonusCalidad}</strong></li>`
+            : `<li><span>Sin equipo comprado</span><strong>+0</strong></li>`
+        }
+      </ul>
+    `;
+    dom.inventoryList.append(card);
+  });
+
+  const extras = itemsComprados.filter((item) => item.tipo === "extra" || item.categoria === "Instrumentos");
+  const legacy = jugador.inventario.filter((nombre) => !obtenerItemTienda(nombre) && nombre !== "Móvil Viejo");
+  const bonusLegacy = {
+    "Fuentes Streetwear": "+5",
+    "Logo Pro": "Redes",
+    "Cena Gratis": "Consumible",
+  };
+  const extraCard = document.createElement("article");
+  extraCard.className = "inventory-card";
+  extraCard.innerHTML = `
+    <h3>Extras de estudio</h3>
+    <ul>
+      ${
+        extras.length || legacy.length
+          ? [
+              ...extras.map((item) => `<li><span>${item.nombre}</span><strong>+${item.bonusCalidad}</strong></li>`),
+              ...legacy.map((nombre) => `<li><span>${nombre}</span><strong>${bonusLegacy[nombre] || "Especial"}</strong></li>`),
+            ].join("")
+          : `<li><span>Sin extras comprados</span><strong>+0</strong></li>`
+      }
+    </ul>
+  `;
+  dom.inventoryList.append(extraCard);
 }
 
 function renderizarBiblioteca() {
@@ -3175,7 +3649,7 @@ function obtenerTituloNarrativo() {
 
 function obtenerTextoNarrativo() {
   if (jugador.faseBloqueada) {
-    return "Llegaste exactamente al objetivo profesional: 10.000 seguidores. El evento definitivo de Fase 2 queda preparado.";
+    return "Llegaste exactamente al objetivo profesional: 20.000 seguidores. El evento definitivo de Fase 2 queda preparado.";
   }
 
   if (jugador.gameOver) {
@@ -3304,6 +3778,7 @@ window.ArtistaUrbanoFase1 = {
   intentarAgregarDMDiario,
   responderDM,
   ganarSeguidores,
+  ganarSeguidoresRedes,
   calcularImpactoIndustria,
   generarCalendarioIndustria,
   obtenerCalendarioIndustria: () => calendarioIndustria,
