@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Urban Label Manager - POC</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="setup-panel" id="setupPanel" aria-labelledby="setupTitle">
+        <div class="brand-block">
+          <p class="eyebrow">Prueba de concepto</p>
+          <h1 id="setupTitle">Urban Label Manager</h1>
+          <p class="intro-copy">
+            Crea tu artista y empieza la primera semana: trabajo, estudio, marketing y un single
+            que puede salir flop o levantar el barrio.
+          </p>
+        </div>
+
+        <form class="creator" id="creatorForm">
+          <label class="field">
+            <span>Nombre artistico</span>
+            <input id="artistName" name="artistName" type="text" maxlength="24" value="Young Vecino" />
+          </label>
+
+          <div class="field">
+            <span>Rol inicial</span>
+            <div class="choice-grid" role="radiogroup" aria-label="Rol inicial">
+              <label class="choice-card">
+                <input type="radio" name="role" value="Productor" checked />
+                <strong>Productor</strong>
+                <small>Mas beats, menos micro al inicio.</small>
+              </label>
+              <label class="choice-card">
+                <input type="radio" name="role" value="Cantante" />
+                <strong>Cantante</strong>
+                <small>Flow y carisma desde el primer dia.</small>
+              </label>
+              <label class="choice-card">
+                <input type="radio" name="role" value="Hibrido" />
+                <strong>Hibrido</strong>
+                <small>Hace de todo, aprende con paciencia.</small>
+              </label>
+            </div>
+          </div>
+
+          <label class="field">
+            <span>Genero principal</span>
+            <select id="genre" name="genre">
+              <option>Trap / Drill</option>
+              <option>Reggaeton</option>
+              <option>Dembow / Afrolatino</option>
+              <option>Rap / Hip-Hop</option>
+              <option>R&B Latino</option>
+              <option>Urbano Alternativo</option>
+              <option>Electronica / Fusion</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Trabajo inicial</span>
+            <select id="job" name="job">
+              <option>Pintor de pisos</option>
+              <option>Cajero de supermercado</option>
+              <option>Repartidor en bici</option>
+              <option>Peon de obra</option>
+            </select>
+          </label>
+
+          <button class="primary-action" type="submit">Empezar carrera</button>
+        </form>
+      </section>
+
+      <section class="game-panel is-hidden" id="gamePanel" aria-label="Panel de juego">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Dia <span id="day">1</span></p>
+            <h2 id="artistHeader">Young Vecino</h2>
+          </div>
+          <button class="ghost-button" id="resetButton" type="button">Reiniciar</button>
+        </header>
+
+        <section class="hud-grid" aria-label="Estado del artista">
+          <article class="stat-card">
+            <span>Energia</span>
+            <strong id="energy">100</strong>
+            <div class="meter"><i id="energyMeter"></i></div>
+          </article>
+          <article class="stat-card">
+            <span>Tiempo</span>
+            <strong><span id="time">8</span>h</strong>
+            <div class="meter"><i id="timeMeter"></i></div>
+          </article>
+          <article class="stat-card">
+            <span>Dinero</span>
+            <strong><span id="money">0</span> EUR</strong>
+          </article>
+          <article class="stat-card">
+            <span>Fans</span>
+            <strong id="followers">0</strong>
+          </article>
+        </section>
+
+        <section class="main-grid">
+          <article class="career-card">
+            <div class="section-heading">
+              <h3>Plan del dia</h3>
+              <p id="roleLine">Productor - Trap / Drill</p>
+            </div>
+            <div class="action-grid" id="actionGrid"></div>
+          </article>
+
+          <article class="career-card">
+            <div class="section-heading">
+              <h3>Single</h3>
+              <p id="singleStatus">0% grabado</p>
+            </div>
+            <div class="single-progress" aria-label="Progreso del single">
+              <i id="singleProgress"></i>
+            </div>
+            <div class="mini-stats">
+              <span>Prod <strong id="prodLevel">1</strong></span>
+              <span>Flow <strong id="flowLevel">1</strong></span>
+              <span>Carisma <strong id="charisma">1</strong></span>
+              <span>Reputacion <strong id="reputation">0</strong></span>
+            </div>
+          </article>
+
+          <article class="career-card feed-card">
+            <div class="section-heading">
+              <h3>Feed</h3>
+              <p>La calle habla rapido</p>
+            </div>
+            <ol class="feed-list" id="feedList"></ol>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
