@@ -2,142 +2,325 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Urban Label Manager - POC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Artista Urbano - Fase 1</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <section class="setup-panel" id="setupPanel" aria-labelledby="setupTitle">
-        <div class="brand-block">
-          <p class="eyebrow">Prueba de concepto</p>
-          <h1 id="setupTitle">Urban Label Manager</h1>
-          <p class="intro-copy">
-            Crea tu artista y empieza la primera semana: trabajo, estudio, marketing y un single
-            que puede salir flop o levantar el barrio.
-          </p>
+    <main class="phone-app" aria-label="Artista Urbano">
+      <header class="app-header">
+        <div class="player-strip">
+          <div class="avatar avatar-player" aria-hidden="true">
+            <span class="avatar-head"></span>
+            <span class="avatar-body"></span>
+          </div>
+          <div>
+            <p class="phase-label">Fase 1 / El Subsuelo</p>
+            <h1>Artista Urbano</h1>
+            <p class="artist-line">Young Vecino · Trap melódico · Barrio Norte</p>
+          </div>
+        </div>
+        <div class="header-metrics">
+          <div class="heat-pill" id="followersGoal">0 / 10.000 fans</div>
+          <div class="music-pill" id="musicStats">🎧 Total Streams: 0 | 💰 Regalias Hoy: +0€</div>
+        </div>
+      </header>
+
+      <section class="tab-screen is-active" id="tab-calendario" aria-labelledby="tab-calendario-btn">
+        <div class="time-band-card">
+          <p class="card-kicker">Franja actual</p>
+          <div class="time-band">
+            <button class="time-chip is-current" id="chip-manana" type="button" data-franja="manana">Mañana <span>10:00-14:00</span></button>
+            <button class="time-chip" id="chip-tarde" type="button" data-franja="tarde">Tarde <span>14:00-22:00</span></button>
+            <button class="time-chip" id="chip-noche" type="button" data-franja="noche">Noche <span>22:00-02:00</span></button>
+          </div>
         </div>
 
-        <form class="creator" id="creatorForm">
-          <label class="field">
-            <span>Nombre artistico</span>
-            <input id="artistName" name="artistName" type="text" maxlength="24" value="Young Vecino" />
-          </label>
-
-          <div class="field">
-            <span>Rol inicial</span>
-            <div class="choice-grid" role="radiogroup" aria-label="Rol inicial">
-              <label class="choice-card">
-                <input type="radio" name="role" value="Productor" checked />
-                <strong>Productor</strong>
-                <small>Mas beats, menos micro al inicio.</small>
-              </label>
-              <label class="choice-card">
-                <input type="radio" name="role" value="Cantante" />
-                <strong>Cantante</strong>
-                <small>Flow y carisma desde el primer dia.</small>
-              </label>
-              <label class="choice-card">
-                <input type="radio" name="role" value="Hibrido" />
-                <strong>Hibrido</strong>
-                <small>Hace de todo, aprende con paciencia.</small>
-              </label>
-            </div>
-          </div>
-
-          <label class="field">
-            <span>Genero principal</span>
-            <select id="genre" name="genre">
-              <option>Trap / Drill</option>
-              <option>Reggaeton</option>
-              <option>Dembow / Afrolatino</option>
-              <option>Rap / Hip-Hop</option>
-              <option>R&B Latino</option>
-              <option>Urbano Alternativo</option>
-              <option>Electronica / Fusion</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span>Trabajo inicial</span>
-            <select id="job" name="job">
-              <option>Pintor de pisos</option>
-              <option>Cajero de supermercado</option>
-              <option>Repartidor en bici</option>
-              <option>Peon de obra</option>
-            </select>
-          </label>
-
-          <button class="primary-action" type="submit">Empezar carrera</button>
-        </form>
-      </section>
-
-      <section class="game-panel is-hidden" id="gamePanel" aria-label="Panel de juego">
-        <header class="topbar">
-          <div>
-            <p class="eyebrow">Dia <span id="day">1</span></p>
-            <h2 id="artistHeader">Young Vecino</h2>
-          </div>
-          <button class="ghost-button" id="resetButton" type="button">Reiniciar</button>
-        </header>
-
-        <section class="hud-grid" aria-label="Estado del artista">
-          <article class="stat-card">
-            <span>Energia</span>
-            <strong id="energy">100</strong>
-            <div class="meter"><i id="energyMeter"></i></div>
+        <section class="status-grid" aria-label="Estado principal">
+          <article class="stat-tile">
+            <span>Día</span>
+            <strong id="stat-dia">01</strong>
           </article>
-          <article class="stat-card">
-            <span>Tiempo</span>
-            <strong><span id="time">8</span>h</strong>
-            <div class="meter"><i id="timeMeter"></i></div>
-          </article>
-          <article class="stat-card">
+          <article class="stat-tile">
             <span>Dinero</span>
-            <strong><span id="money">0</span> EUR</strong>
+            <strong id="stat-dinero">150€</strong>
           </article>
-          <article class="stat-card">
-            <span>Fans</span>
-            <strong id="followers">0</strong>
+          <article class="stat-tile warning">
+            <span>Fatiga</span>
+            <strong id="stat-fatiga">0%</strong>
+            <i class="bar"><b id="bar-fatiga" style="width: 0%"></b></i>
+          </article>
+          <article class="stat-tile danger">
+            <span>Frustración</span>
+            <strong id="stat-frustracion">0%</strong>
+            <i class="bar"><b id="bar-frustracion" style="width: 0%"></b></i>
           </article>
         </section>
 
-        <section class="main-grid">
-          <article class="career-card">
-            <div class="section-heading">
-              <h3>Plan del dia</h3>
-              <p id="roleLine">Productor - Trap / Drill</p>
+        <section class="progress-card" aria-label="Progreso de seguidores">
+          <div>
+            <p class="card-kicker">Salto profesional</p>
+            <h2><span id="stat-seguidores">0</span> / 10.000 seguidores</h2>
+          </div>
+          <i class="bar"><b id="bar-seguidores" style="width: 0%"></b></i>
+        </section>
+
+        <section class="progress-card" aria-label="Puntos de acción de tarde">
+          <div>
+            <p class="card-kicker">Acciones de tarde</p>
+            <h2><span id="stat-puntos-tarde">0</span> / 3 puntos disponibles</h2>
+          </div>
+          <i class="bar"><b id="bar-puntos-tarde" style="width: 0%"></b></i>
+        </section>
+
+        <section class="industry-card" aria-label="Próximas novedades de la industria">
+          <div class="section-title">
+            <p class="card-kicker">Industria</p>
+            <h2>Próximas novedades</h2>
+          </div>
+          <p class="weekday-pill" id="simulatedWeekday">Hoy: Lunes · Día 1</p>
+          <ul class="industry-list" id="industryCalendarList"></ul>
+        </section>
+
+        <section class="dna-card">
+          <div class="section-title">
+            <p class="card-kicker">ADN musical</p>
+            <h2>Atributos del artista</h2>
+          </div>
+          <div class="attribute-grid" aria-label="Atributos musicales">
+            <article class="attribute-card">
+              <span>Producción</span>
+              <strong id="stat-produccion">1</strong>
+              <i class="bar"><b id="bar-produccion" style="width: 1%"></b></i>
+            </article>
+            <article class="attribute-card">
+              <span>Flow</span>
+              <strong id="stat-flow">1</strong>
+              <i class="bar"><b id="bar-flow" style="width: 1%"></b></i>
+            </article>
+            <article class="attribute-card">
+              <span>Carisma</span>
+              <strong id="stat-carisma">1</strong>
+              <i class="bar"><b id="bar-carisma" style="width: 1%"></b></i>
+            </article>
+            <article class="attribute-card">
+              <span>Respeto</span>
+              <strong id="stat-respeto">1</strong>
+              <i class="bar"><b id="bar-respeto" style="width: 1%"></b></i>
+            </article>
+          </div>
+        </section>
+
+        <section class="studio-card">
+          <div class="section-title">
+            <p class="card-kicker">Estudio independiente</p>
+            <h2>Entrenar y lanzar</h2>
+          </div>
+          <div class="studio-actions">
+            <button class="action-button studio-button" id="trainProductionBtn" type="button">
+              Entrenar producción
+            </button>
+            <button class="action-button studio-button" id="trainFlowBtn" type="button">
+              Entrenar flow
+            </button>
+            <div class="single-progress-card">
+              <span id="singleProjectStatus">Estudio: Libre</span>
+              <i class="bar"><b id="bar-single-progreso" style="width: 0%"></b></i>
             </div>
-            <div class="action-grid" id="actionGrid"></div>
+            <button class="primary-button single-button" id="releaseSingleBtn" type="button">
+              Trabajar en single
+            </button>
+          </div>
+        </section>
+
+        <article class="story-card">
+          <div class="story-avatars">
+            <div class="avatar avatar-mother" aria-label="Madre">
+              <span class="avatar-head"></span>
+              <span class="avatar-body"></span>
+            </div>
+            <div class="avatar avatar-rival" aria-label="Rapero rival">
+              <span class="avatar-head"></span>
+              <span class="avatar-body"></span>
+            </div>
+          </div>
+          <p class="card-kicker">Evento narrativo</p>
+          <h2 id="story-title">Tu madre te pregunta si esto de la música paga el alquiler.</h2>
+          <p id="story-body">
+            El rival del bloque acaba de subir una story desde un estudio real. Puedes tragarte el
+            orgullo o convertir la presión en gasolina.
+          </p>
+          <button class="primary-button" id="advanceTimeBtn" type="button">Avanzar acción</button>
+        </article>
+      </section>
+
+      <section class="tab-screen" id="tab-curro" aria-labelledby="tab-curro-btn">
+        <div class="section-title">
+          <p class="card-kicker">Supervivencia independiente</p>
+          <h2>El Curro</h2>
+        </div>
+
+        <div class="job-list" id="jobList">
+          <article class="job-card">
+            <div class="job-icon">🎨</div>
+            <div>
+              <h3>Pintor de Pisos</h3>
+              <p>Trabajo estable, pintura en la ropa y cero glamour.</p>
+              <div class="impact-row">
+                <span>+65€</span>
+                <span class="impact-bad">+24 fatiga</span>
+              </div>
+            </div>
+            <button class="action-button" type="button" data-work="pintor">Aceptar turno</button>
           </article>
 
-          <article class="career-card">
-            <div class="section-heading">
-              <h3>Single</h3>
-              <p id="singleStatus">0% grabado</p>
+          <article class="job-card">
+            <div class="job-icon">🧾</div>
+            <div>
+              <h3>Cajero de Súper</h3>
+              <p>Menos desgaste físico, más frases de “abre otra caja”.</p>
+              <div class="impact-row">
+                <span>+48€</span>
+                <span class="impact-mid">+18 fatiga</span>
+              </div>
             </div>
-            <div class="single-progress" aria-label="Progreso del single">
-              <i id="singleProgress"></i>
-            </div>
-            <div class="mini-stats">
-              <span>Prod <strong id="prodLevel">1</strong></span>
-              <span>Flow <strong id="flowLevel">1</strong></span>
-              <span>Carisma <strong id="charisma">1</strong></span>
-              <span>Reputacion <strong id="reputation">0</strong></span>
-            </div>
+            <button class="action-button" type="button" data-work="cajero">Fichar</button>
           </article>
 
-          <article class="career-card feed-card">
-            <div class="section-heading">
-              <h3>Feed</h3>
-              <p>La calle habla rapido</p>
+          <article class="job-card">
+            <div class="job-icon">🚲</div>
+            <div>
+              <h3>Repartidor en Bici</h3>
+              <p>Rápido, rentable y con rodillas negociando su renuncia.</p>
+              <div class="impact-row">
+                <span>+74€</span>
+                <span class="impact-bad">+32 fatiga</span>
+              </div>
             </div>
-            <ol class="feed-list" id="feedList"></ol>
+            <button class="action-button" type="button" data-work="repartidor">Salir a repartir</button>
           </article>
+        </div>
+      </section>
+
+      <section class="tab-screen" id="tab-redes" aria-labelledby="tab-redes-btn">
+        <div class="section-title">
+          <p class="card-kicker">DMs e Instagram/Twitter</p>
+          <h2>Redes</h2>
+        </div>
+
+        <section class="social-block">
+          <h3>Mensajes Directos</h3>
+          <div class="dm-list" id="mensajes-directos"></div>
+          <div class="dm-modal is-hidden" id="dmDecisionModal" aria-live="polite"></div>
+        </section>
+
+        <section class="social-block">
+          <h3>Feed local</h3>
+          <button class="primary-button reels-button" id="reelsActionBtn" type="button">
+            Subir TikTok/Reels
+          </button>
+          <button class="action-button social-action nap-button" id="napActionBtn" type="button">
+            Echarse una siesta
+          </button>
+          <button class="action-button social-action" id="battleActionBtn" type="button">
+            Batalla de gallos en la plaza
+          </button>
+          <button class="action-button social-action beef-button" id="beefResponseBtn" type="button" disabled>
+            Grabar tiradera esta noche
+          </button>
+          <div class="twitter-feed" id="twitterFeed">
+          <article class="tweet-card trend">
+            <span>#NuevoEnElBloque</span>
+            <p>Un chaval del barrio está moviendo snippets raros pero con estilo.</p>
+          </article>
+          <article class="tweet-card">
+            <span>@radioPatio</span>
+            <p>Dicen que hoy hay batalla improvisada detrás del metro. La policía también lo dice.</p>
+          </article>
+          <article class="tweet-card hot">
+            <span>@criticoDePortal</span>
+            <p>El beat está crudo, pero hay hambre. Eso no se compra en plugins.</p>
+          </article>
+          </div>
         </section>
       </section>
+
+      <section class="tab-screen" id="tab-eventos" aria-labelledby="tab-eventos-btn">
+        <div class="section-title">
+          <p class="card-kicker">Historial / El Bloque</p>
+          <h2>Eventos</h2>
+        </div>
+
+        <ol class="event-feed" id="eventFeed">
+          <li class="event-card positive">
+            <time>Día 04 · 15:30</time>
+            <h3>Vecino curioso</h3>
+            <p>Alguien preguntó por el tema que sonaba desde tu ventana. +3 reputación local.</p>
+          </li>
+          <li class="event-card alert">
+            <time>Día 04 · 13:10</time>
+            <h3>Multa por ruido</h3>
+            <p>La policía tocó el timbre. Tu altavoz no tiene modo diplomático. -35€.</p>
+          </li>
+          <li class="event-card positive">
+            <time>Día 03 · 23:44</time>
+            <h3>Freestyle en el bloque</h3>
+            <p>Un corro pequeño acabó coreando tu nombre artístico. Pequeño, pero real.</p>
+          </li>
+          <li class="event-card alert">
+            <time>Día 03 · 18:05</time>
+            <h3>Rodilla tocada</h3>
+            <p>El reparto en bici salió caro. Mañana habrá fatiga extra si fuerzas el turno.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="tab-screen" id="tab-tienda" aria-labelledby="tab-tienda-btn">
+        <div class="section-title">
+          <p class="card-kicker">Tienda / Inventario</p>
+          <h2>Equipo y estilo</h2>
+        </div>
+
+        <div class="shop-grid" id="shopGrid"></div>
+
+        <section class="library-card" aria-label="Biblioteca de temas">
+          <div class="section-title">
+            <p class="card-kicker">Biblioteca</p>
+            <h2>Temas del estudio</h2>
+          </div>
+          <div class="library-list" id="libraryList">
+            <article class="library-empty">
+              <strong>Sin temas guardados</strong>
+              <p>Trabaja 3 noches en un single para crear un inedito y decidir cuando lanzarlo.</p>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <nav class="bottom-nav" aria-label="Navegación de fase 1">
+        <button class="nav-item is-active" id="tab-calendario-btn" type="button" data-tab="tab-calendario">
+          <span>📅</span>
+          Estado
+        </button>
+        <button class="nav-item" id="tab-curro-btn" type="button" data-tab="tab-curro">
+          <span>💼</span>
+          Curro
+        </button>
+        <button class="nav-item" id="tab-redes-btn" type="button" data-tab="tab-redes">
+          <span>💬</span>
+          Redes
+        </button>
+        <button class="nav-item" id="tab-eventos-btn" type="button" data-tab="tab-eventos">
+          <span>🎭</span>
+          Eventos
+        </button>
+        <button class="nav-item" id="tab-tienda-btn" type="button" data-tab="tab-tienda">
+          <span>🛒</span>
+          Tienda
+        </button>
+      </nav>
     </main>
 
-    <script src="app.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
